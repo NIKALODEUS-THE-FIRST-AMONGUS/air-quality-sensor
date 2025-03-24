@@ -1,0 +1,17 @@
+MQ135 Gas Sensor – For detecting harmful gases and air quality (PPM levels).
+
+NodeMCU ESP8266 – Microcontroller with Wi-Fi capabilities for data transmission.
+
+DHT11 Sensor – Measures temperature and humidity.
+
+Relay Module – Controls external devices (like an exhaust fan).
+
+Buzzer Module – Provides an alert sound when air quality is poor.
+
+Power Supply (5V or USB Adapter) – To power the NodeMCU.
+
+Jumper Wires – For making connections.
+
+Breadboard (Optional) – For easy prototyping.
+
+Adafruit IO Account – For IoT dashboard and data visualization.
