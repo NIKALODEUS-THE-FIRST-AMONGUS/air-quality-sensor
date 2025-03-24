@@ -1,0 +1,13 @@
+Component	                       -> Pin on NodeMCU ESP8266	 ->Pin on Component	Purpose
+MQ135 Gas Sensor	                       ->A0	                 AO	Analog output for gas levels
+                                        ->(3.3V)
+                                      ->GND power connection
+DHT11 Temperature & Humidity Sensor	    ->D2	Data Pin	       Reads temperature & humidity
+                                        ->(3.3V)
+                                       ->GND	Ground connection
+Relay Module	                        ->D6	Signal	           Controls external devices
+                                        ->(5V)
+                                      ->GND	Ground connection
+Buzzer Module                         ->D4	Signal	           Alarm for poor air quality
+                                      ->(3.3V)
+                                     ->GND	Ground connection
