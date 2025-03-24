@@ -1,0 +1,1 @@
+This project is an IoT-based Air Quality Monitoring System that detects harmful gases and monitors temperature & humidity in the environment. Using the MQ135 gas sensor, it measures air pollution levels, and the DHT11 sensor provides temperature and humidity data. The collected data is sent to Adafruit IO via the NodeMCU ESP12E, enabling real-time monitoring from anywhere.
