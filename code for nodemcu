@@ -1,0 +1,92 @@
+#include <ESP8266WiFi.h>
+#include <Adafruit_MQTT.h>
+#include <Adafruit_MQTT_Client.h>
+#include <DHT.h>
+
+// WiFi Credentials
+#define WIFI_SSID     "Your_WiFi_Name"
+#define WIFI_PASS     "Your_WiFi_Password"
+
+// Adafruit IO Credentials
+#define AIO_SERVER    "io.adafruit.com"
+#define AIO_USERNAME  "Your_Adafruit_Username"
+#define AIO_KEY       "Your_Adafruit_IO_Key"
+
+// MQTT Setup
+WiFiClient client;
+Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, 1883, AIO_USERNAME, AIO_KEY);
+
+// Adafruit IO Feeds
+Adafruit_MQTT_Publish airQualityFeed = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/airquality");
+Adafruit_MQTT_Publish tempFeed = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/temperature");
+Adafruit_MQTT_Publish humidityFeed = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/feeds/humidity");
+
+// Sensor Pins
+#define MQ135_PIN     A0      // Air Quality Sensor (Analog)
+#define DHT_PIN       D4      // DHT11 Sensor Pin
+#define DHT_TYPE      DHT11   // Define DHT sensor type
+
+// Initialize DHT Sensor
+DHT dht(DHT_PIN, DHT_TYPE);
+
+void setup() {
+    Serial.begin(115200);
+    delay(10);
+
+    // Connect to WiFi
+    Serial.print("Connecting to WiFi...");
+    WiFi.begin(WIFI_SSID, WIFI_PASS);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println(" Connected!");
+
+    // Start Sensors
+    dht.begin();
+}
+
+void loop() {
+    // Ensure MQTT is connected
+    if (mqtt.connected()) {
+        mqtt.processPackets(10000);
+    } else {
+        reconnectMQTT();
+    }
+
+    // Read Sensor Data
+    float airQuality = analogRead(MQ135_PIN);
+    float temperature = dht.readTemperature();
+    float humidity = dht.readHumidity();
+
+    // Print values to Serial Monitor
+    Serial.print("Air Quality: "); Serial.println(airQuality);
+    Serial.print("Temperature: "); Serial.println(temperature);
+    Serial.print("Humidity: "); Serial.println(humidity);
+    
+    // Send Data to Adafruit IO
+    if (!airQualityFeed.publish(airQuality)) {
+        Serial.println("Failed to send Air Quality Data!");
+    }
+    if (!tempFeed.publish(temperature)) {
+        Serial.println("Failed to send Temperature Data!");
+    }
+    if (!humidityFeed.publish(humidity)) {
+        Serial.println("Failed to send Humidity Data!");
+    }
+
+    delay(5000);  // Wait 5 seconds before next reading
+}
+
+// Reconnect to MQTT if disconnected
+void reconnectMQTT() {
+    Serial.print("Connecting to MQTT...");
+    while (!mqtt.connected()) {
+        if (mqtt.connect()) {
+            Serial.println(" Connected!");
+        } else {
+            Serial.print(".");
+            delay(2000);
+        }
+    }
+}
