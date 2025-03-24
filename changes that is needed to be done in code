@@ -1,0 +1,14 @@
+ What You Need to Do
+->Replace Wi-Fi credentials in:
+
+#define WIFI_SSID "Your_WiFi_Name"
+#define WIFI_PASS "Your_WiFi_Password"
+Replace Adafruit IO credentials in:
+
+->replace adafruit username with yours
+
+#define AIO_USERNAME "Your_Adafruit_Username"
+#define AIO_KEY "Your_Adafruit_IO_Key"
+Upload the code to your NodeMCU using Arduino IDE.
+
+Monitor readings on Adafruit IO Dashboard! 🎉
